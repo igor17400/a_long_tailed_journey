@@ -1,0 +1,823 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>A Long-Tailed Journey</title>
+  <style>
+    :root {
+      --imperial-blue: #003E74;
+      --deep-blue: #1E4080;
+      --rust: #B8472A;
+      --accent: #E07050;
+      --violet: #6B3FA0;
+      --red-dark: #8B2020;
+      --bg: #FAFAF8;
+      --card: #FFFFFF;
+      --text: #1a1a1a;
+      --muted: #555;
+      --border: #e0ddd8;
+      --hero-bg: #0a1628;
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.65;
+    }
+
+    /* ── Hero / Collapse Animation ── */
+    .hero {
+      position: relative;
+      width: 100%;
+      height: 100vh;
+      min-height: 600px;
+      background: var(--hero-bg);
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .hero canvas {
+      position: absolute;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+    }
+
+    .hero-content {
+      position: relative;
+      z-index: 2;
+      text-align: center;
+      max-width: 900px;
+      padding: 0 2rem;
+    }
+
+    .hero-content h1 {
+      font-size: clamp(1.6rem, 4vw, 2.8rem);
+      color: #fff;
+      font-weight: 700;
+      letter-spacing: -0.02em;
+      line-height: 1.3;
+      margin-bottom: 1rem;
+    }
+
+    .hero-content .subtitle {
+      font-size: clamp(0.95rem, 1.8vw, 1.15rem);
+      color: rgba(255,255,255,0.7);
+      margin-bottom: 1.5rem;
+    }
+
+    .hero-content .authors {
+      font-size: 1rem;
+      color: rgba(255,255,255,0.55);
+    }
+
+    .hero-content .authors a {
+      color: rgba(255,255,255,0.75);
+      text-decoration: none;
+      border-bottom: 1px solid rgba(255,255,255,0.25);
+    }
+
+    .hero-label {
+      position: absolute;
+      z-index: 2;
+      bottom: 2.5rem;
+      left: 50%;
+      transform: translateX(-50%);
+      font-size: 0.8rem;
+      color: rgba(255,255,255,0.35);
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+    }
+
+    .scroll-indicator {
+      position: absolute;
+      z-index: 2;
+      bottom: 1rem;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 24px;
+      height: 38px;
+      border: 2px solid rgba(255,255,255,0.25);
+      border-radius: 12px;
+    }
+    .scroll-indicator::after {
+      content: '';
+      position: absolute;
+      top: 6px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 4px;
+      height: 8px;
+      background: rgba(255,255,255,0.4);
+      border-radius: 2px;
+      animation: scrollPulse 2s ease-in-out infinite;
+    }
+    @keyframes scrollPulse {
+      0%, 100% { opacity: 1; transform: translateX(-50%) translateY(0); }
+      50% { opacity: 0.3; transform: translateX(-50%) translateY(10px); }
+    }
+
+    /* ── Main Content ── */
+    .container {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 4rem 1.5rem;
+    }
+
+    /* ── Problem Statement (hero box) ── */
+    .problem-box {
+      background: linear-gradient(135deg, #FFF8F0, #FFF5EB);
+      border: 1px solid #e8d5c0;
+      border-radius: 16px;
+      padding: 2.5rem;
+      margin-bottom: 3.5rem;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.04);
+    }
+
+    .problem-box p {
+      font-size: 1.12rem;
+      text-align: center;
+      color: #333;
+      max-width: 800px;
+      margin: 0 auto;
+    }
+
+    .problem-box strong { color: var(--rust); }
+
+    .problem-stats {
+      display: flex;
+      justify-content: center;
+      gap: 3rem;
+      margin-top: 1.5rem;
+      flex-wrap: wrap;
+    }
+
+    .stat {
+      text-align: center;
+    }
+    .stat .num {
+      font-size: 2.2rem;
+      font-weight: 800;
+      color: var(--imperial-blue);
+    }
+    .stat .label {
+      font-size: 0.85rem;
+      color: var(--muted);
+      margin-top: 0.2rem;
+    }
+
+    /* ── Section Headings ── */
+    .section-heading {
+      font-size: 1.6rem;
+      font-weight: 700;
+      color: var(--imperial-blue);
+      margin-bottom: 1.5rem;
+      padding-bottom: 0.5rem;
+      border-bottom: 3px solid var(--imperial-blue);
+      display: inline-block;
+    }
+
+    section { margin-bottom: 3.5rem; }
+
+    /* ── Cards ── */
+    .card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 1.8rem;
+      margin-bottom: 1.5rem;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.03);
+    }
+
+    .card h3 {
+      font-size: 1.15rem;
+      font-weight: 700;
+      margin-bottom: 0.8rem;
+    }
+
+    .card ul {
+      padding-left: 1.3rem;
+    }
+
+    .card li {
+      margin-bottom: 0.5rem;
+      color: #333;
+    }
+
+    .card li strong { color: var(--text); }
+
+    /* ── Method Cards Grid ── */
+    .methods-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1.5rem;
+    }
+
+    @media (max-width: 700px) {
+      .methods-grid { grid-template-columns: 1fr; }
+    }
+
+    .method-card {
+      background: var(--card);
+      border-radius: 12px;
+      padding: 1.5rem;
+      border-left: 4px solid var(--imperial-blue);
+      box-shadow: 0 2px 8px rgba(0,0,0,0.03);
+    }
+
+    .method-card.rebalancing { border-left-color: var(--violet); }
+    .method-card.contrastive { border-left-color: var(--red-dark); }
+    .method-card.routing { border-left-color: var(--violet); }
+    .method-card.fusion { border-left-color: var(--accent); }
+
+    .method-card h3 {
+      font-size: 1.05rem;
+      font-weight: 700;
+      margin-bottom: 0.6rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .method-tag {
+      font-size: 0.65rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      padding: 0.15rem 0.5rem;
+      border-radius: 4px;
+      color: #fff;
+    }
+
+    .method-tag.rebalancing { background: var(--violet); }
+    .method-tag.contrastive { background: var(--red-dark); }
+    .method-tag.routing { background: var(--violet); }
+    .method-tag.fusion { background: var(--accent); }
+
+    .method-card p, .method-card .formula {
+      font-size: 0.92rem;
+      color: #444;
+    }
+
+    .formula {
+      font-family: 'Cambria Math', 'Times New Roman', serif;
+      font-style: italic;
+      background: #f5f3ef;
+      padding: 0.6rem 1rem;
+      border-radius: 6px;
+      margin-top: 0.7rem;
+      text-align: center;
+      font-size: 0.95rem;
+      color: #333;
+    }
+
+    /* ── Results Table ── */
+    .results-table-wrap {
+      overflow-x: auto;
+      margin: 1rem 0;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.9rem;
+    }
+
+    thead { background: var(--imperial-blue); color: #fff; }
+
+    th {
+      padding: 0.7rem 1rem;
+      text-align: left;
+      font-weight: 600;
+      font-size: 0.82rem;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    td {
+      padding: 0.6rem 1rem;
+      border-bottom: 1px solid var(--border);
+    }
+
+    tbody tr:hover { background: #f8f7f5; }
+
+    .highlight-row { background: #FFF8F0; font-weight: 600; }
+    .best { color: var(--rust); font-weight: 700; }
+
+    /* ── Clinical Task Timeline ── */
+    .timeline {
+      position: relative;
+      padding: 1.5rem 0 1.5rem 2.5rem;
+    }
+
+    .timeline::before {
+      content: '';
+      position: absolute;
+      left: 0.75rem;
+      top: 0;
+      bottom: 0;
+      width: 3px;
+      background: linear-gradient(to bottom, var(--imperial-blue), var(--accent));
+      border-radius: 2px;
+    }
+
+    .timeline-item {
+      position: relative;
+      margin-bottom: 1.2rem;
+    }
+
+    .timeline-item::before {
+      content: '';
+      position: absolute;
+      left: -2.05rem;
+      top: 0.45rem;
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+      background: var(--imperial-blue);
+      border: 3px solid var(--bg);
+    }
+
+    .timeline-item h4 {
+      font-size: 0.95rem;
+      font-weight: 700;
+      color: var(--imperial-blue);
+    }
+
+    .timeline-item p {
+      font-size: 0.88rem;
+      color: #555;
+      margin-top: 0.15rem;
+    }
+
+    /* ── Conclusions ── */
+    .conclusions-list {
+      list-style: none;
+      padding: 0;
+    }
+
+    .conclusions-list li {
+      padding: 1rem 1.2rem;
+      margin-bottom: 0.8rem;
+      background: var(--card);
+      border-radius: 10px;
+      border: 1px solid var(--border);
+      font-size: 0.95rem;
+    }
+
+    .conclusions-list li strong {
+      color: var(--imperial-blue);
+    }
+
+    /* ── Footer ── */
+    footer {
+      background: var(--hero-bg);
+      color: rgba(255,255,255,0.6);
+      text-align: center;
+      padding: 2rem 1.5rem;
+      font-size: 0.85rem;
+    }
+
+    footer a {
+      color: rgba(255,255,255,0.8);
+      text-decoration: none;
+      border-bottom: 1px solid rgba(255,255,255,0.2);
+    }
+
+    /* ── Two-column layout ── */
+    .two-col {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 2rem;
+      align-items: start;
+    }
+
+    @media (max-width: 800px) {
+      .two-col { grid-template-columns: 1fr; }
+    }
+
+    /* ── References ── */
+    .references {
+      font-size: 0.8rem;
+      color: #666;
+      line-height: 1.6;
+    }
+
+    .references ol {
+      padding-left: 1.5rem;
+    }
+
+    .references li {
+      margin-bottom: 0.4rem;
+    }
+
+    /* ── Subheading ── */
+    .subheading {
+      font-size: 1.1rem;
+      font-weight: 600;
+      color: var(--imperial-blue);
+      margin: 1.5rem 0 0.8rem;
+    }
+  </style>
+</head>
+<body>
+
+<!-- ════════════════════════════════════════════════ -->
+<!-- HERO: Single-Point Collapse Animation           -->
+<!-- ════════════════════════════════════════════════ -->
+<section class="hero">
+  <canvas id="collapseCanvas"></canvas>
+  <div class="hero-content">
+    <h1>A Long-Tailed Journey</h1>
+    <p class="subtitle">Navigating Class Imbalance in Extreme Binary Classification in Multimodal Clinical Data</p>
+    <p class="authors">
+      <a href="https://github.com/igorlima1740">Igor L.R. Azevedo</a> &amp; Pedro A.M. Mediano<br>
+      Department of Computing, Imperial College London
+    </p>
+  </div>
+  <div class="hero-label">single-point collapse under 99:1 imbalance</div>
+  <div class="scroll-indicator"></div>
+</section>
+
+<!-- ════════════════════════════════════════════════ -->
+<!-- PROBLEM STATEMENT                                -->
+<!-- ════════════════════════════════════════════════ -->
+<div class="container">
+
+  <div class="problem-box">
+    <p>
+      <strong>Pressure Ulcers (PU)</strong> affect ~1% of ICU stays but cause significant patient harm.
+      At this prevalence, standard classifiers learn a trivial solution:
+      predict <strong>everyone negative</strong>, achieving >99% accuracy while detecting <strong>zero</strong> patients at risk.
+    </p>
+    <div class="problem-stats">
+      <div class="stat"><div class="num">~1%</div><div class="label">PU prevalence in ICU</div></div>
+      <div class="stat"><div class="num">>99%</div><div class="label">Accuracy of trivial classifier</div></div>
+      <div class="stat"><div class="num">0</div><div class="label">At-risk patients detected</div></div>
+    </div>
+  </div>
+
+  <!-- ════════════════════════════════════════════════ -->
+  <!-- METHODS                                          -->
+  <!-- ════════════════════════════════════════════════ -->
+  <section>
+    <h2 class="section-heading">Methods for Long-Tail Learning</h2>
+
+    <p style="margin-bottom:1.5rem; color:#444;">
+      We study two complementary families of techniques: <strong>re-balancing strategies</strong> that modify the loss function
+      to counteract class imbalance, and <strong>representation learning</strong> approaches that use contrastive objectives to
+      learn embeddings where same-class samples cluster together.
+    </p>
+
+    <div class="methods-grid">
+
+      <div class="method-card rebalancing">
+        <h3><span class="method-tag rebalancing">Re-balancing</span> LDAM</h3>
+        <p>Label-Distribution-Aware Margin Loss. Enforces class-dependent margins proportional to class frequency, pushing the decision boundary away from rare classes.</p>
+        <div class="formula">&Delta;<sub>y</sub> = C / n<sub>y</sub><sup>1/4</sup></div>
+      </div>
+
+      <div class="method-card rebalancing">
+        <h3><span class="method-tag rebalancing">Re-balancing</span> Logit Adjustment</h3>
+        <p>Shifts logits by class priors to achieve Fisher-consistent balanced error. Simple post-hoc or during-training correction.</p>
+        <div class="formula">logit<sub>y</sub> &rarr; logit<sub>y</sub> + &tau; &middot; log(&pi;<sub>y</sub>)</div>
+      </div>
+
+      <div class="method-card routing">
+        <h3><span class="method-tag routing">Routing</span> RIDE</h3>
+        <p>Routing Diverse Distribution-Aware Experts. Multiple expert branches with LDAM loss and KL-divergence diversity, so each expert specialises in different regions of the class distribution.</p>
+      </div>
+
+      <div class="method-card contrastive">
+        <h3><span class="method-tag contrastive">Contrastive</span> SupProto</h3>
+        <p>Fixed antipodal class prototypes on the unit sphere. Minority and majority prototypes are placed at opposite poles, with a conditional pull loss that prevents collapse.</p>
+        <div class="formula">p<sub>min</sub> = &minus;p<sub>maj</sub></div>
+      </div>
+
+      <div class="method-card contrastive">
+        <h3><span class="method-tag contrastive">Contrastive</span> SupMin</h3>
+        <p>Class-routed contrastive loss: applies SupCon only within the minority class and NT-Xent for the majority, preventing the minority from being drowned out.</p>
+      </div>
+
+      <div class="method-card fusion">
+        <h3><span class="method-tag fusion">Fusion</span> FuseMoE</h3>
+        <p>Mixture-of-Experts Transformer for multimodal fusion. Laplace-gated TopK routing across modalities (vitals, labs, clinical notes), adapted for the 1% prevalence setting.</p>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ════════════════════════════════════════════════ -->
+  <!-- CLINICAL TASK                                    -->
+  <!-- ════════════════════════════════════════════════ -->
+  <section>
+    <div class="two-col">
+      <div>
+        <h2 class="section-heading">Clinical Task</h2>
+        <div class="card">
+          <h3>Pressure Ulcer Prediction in ICU</h3>
+          <ul>
+            <li><strong>Task:</strong> predict hospital-acquired PU onset using cumulative observation windows generated every 3h from admission (with 1h lead time to prevent label leakage).</li>
+            <li><strong>Data:</strong> MIMIC-IV multimodal ICU data &mdash; irregular vitals, labs, and clinical notes.</li>
+            <li><strong>Training:</strong> cadenced by positives &mdash; the model validates every 1,458 positives (25%) and stops after 5,831 positives (100%), preventing the majority class from dominating gradient updates.</li>
+          </ul>
+        </div>
+      </div>
+      <div>
+        <h2 class="section-heading">Architecture</h2>
+        <div class="timeline">
+          <div class="timeline-item">
+            <h4>Per-Modality Encoding</h4>
+            <p>Irregular TS &rarr; Time2Vec + mTAND; Notes &rarr; BioBERT embeddings; Regular TS &rarr; Conv1D</p>
+          </div>
+          <div class="timeline-item">
+            <h4>Token Type Embeddings</h4>
+            <p>Modality-specific embeddings distinguish signal sources</p>
+          </div>
+          <div class="timeline-item">
+            <h4>TransformerCrossEncoder &times; N</h4>
+            <p>Self-attention per modality + MoE fusion with Laplace gating &amp; TopK routing</p>
+          </div>
+          <div class="timeline-item">
+            <h4>Classification Head</h4>
+            <p>Concat last hidden states &rarr; MLP &rarr; binary logit</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ════════════════════════════════════════════════ -->
+  <!-- RESULTS                                          -->
+  <!-- ════════════════════════════════════════════════ -->
+  <section>
+    <h2 class="section-heading">Preliminary Results</h2>
+
+    <div class="card">
+      <ul style="margin-bottom:1rem;">
+        <li><strong>Controlled testbed:</strong> CIFAR-10-LT with binary prevalence set to 1% (matching clinical PU rates) to isolate the effect of imbalance from clinical complexity.</li>
+        <li><strong>Imbalanced test set:</strong> unlike standard benchmarks that evaluate on a balanced test split, we keep the test set imbalanced to reflect real-world deployment.</li>
+      </ul>
+    </div>
+
+    <p class="subheading">CIFAR-10-LT Testbed: Imbalanced vs. Balanced Evaluation</p>
+    <div class="results-table-wrap">
+      <table>
+        <thead>
+          <tr><th>Method</th><th>Family</th><th>Sensitivity</th><th>F1</th><th>AUROC</th><th>AUPRC</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>CE (baseline)</td><td>-</td><td>0.0%</td><td>0.0%</td><td>82.1%</td><td>15.6%</td></tr>
+          <tr><td>Logit Adj.</td><td>Re-balancing</td><td>66.8%</td><td>16.0%</td><td>83.0%</td><td>16.3%</td></tr>
+          <tr><td>LDAM + DRW</td><td>Re-balancing</td><td>70.4%</td><td>14.2%</td><td>82.3%</td><td>14.3%</td></tr>
+          <tr><td>RIDE</td><td>Routing</td><td>68.2%</td><td>17.3%</td><td>85.3%</td><td>18.8%</td></tr>
+          <tr><td>SupCon</td><td>Contrastive</td><td>72.0%</td><td>11.2%</td><td>81.8%</td><td>13.0%</td></tr>
+          <tr><td>BCL</td><td>Contrastive</td><td>60.4%</td><td>15.4%</td><td>81.4%</td><td>14.3%</td></tr>
+          <tr class="highlight-row"><td>SupProto</td><td>Contrastive</td><td class="best">78.6%</td><td>15.8%</td><td>84.5%</td><td>18.5%</td></tr>
+          <tr class="highlight-row"><td>SupMin</td><td>Contrastive</td><td>76.2%</td><td class="best">18.1%</td><td class="best">86.0%</td><td class="best">20.2%</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <p class="subheading">FuseMoE on MIMIC-IV PU Prediction (~1% prevalence)</p>
+    <div class="results-table-wrap">
+      <table>
+        <thead>
+          <tr><th>Loss</th><th>Sensitivity</th><th>F1</th><th>AUROC</th><th>AUPRC</th></tr>
+        </thead>
+        <tbody>
+          <tr class="highlight-row"><td>CE (baseline)</td><td>57.6%</td><td class="best">10.3%</td><td class="best">79.9%</td><td class="best">6.0%</td></tr>
+          <tr><td>LDAM</td><td>59.4%</td><td>8.5%</td><td>76.1%</td><td>4.7%</td></tr>
+          <tr><td>RIDE</td><td class="best">61.8%</td><td>9.1%</td><td>78.2%</td><td>5.4%</td></tr>
+          <tr><td>SupProto</td><td>55.2%</td><td>7.8%</td><td>74.5%</td><td>4.1%</td></tr>
+          <tr><td>SupMin</td><td>58.0%</td><td>8.0%</td><td>75.8%</td><td>4.5%</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- ════════════════════════════════════════════════ -->
+  <!-- CONCLUSIONS                                      -->
+  <!-- ════════════════════════════════════════════════ -->
+  <section>
+    <h2 class="section-heading">Conclusions</h2>
+    <ul class="conclusions-list">
+      <li><strong>Testbed vs. clinical transfer:</strong> SupProto and SupMin outperform BCL and SupCon on binary CIFAR-10-LT, confirming their design for extreme imbalance. Yet contrastive losses paired with FuseMoE underperform CE on AUPRC, suggesting that representation-level fixes alone do not transfer to multimodal clinical data. MoE-based routing (RIDE) remains a promising direction.</li>
+      <li><strong>Multimodal gap:</strong> Long-tail methods validated on unimodal benchmarks do not straightforwardly transfer to multimodal fusion, highlighting the need for strategies designed jointly with the fusion architecture.</li>
+      <li><strong>Next steps:</strong> Design long-tail strategies purpose-built for multimodal clinical fusion.</li>
+    </ul>
+  </section>
+
+  <!-- ════════════════════════════════════════════════ -->
+  <!-- REFERENCES                                       -->
+  <!-- ════════════════════════════════════════════════ -->
+  <section>
+    <h2 class="section-heading">References</h2>
+    <div class="references">
+      <ol>
+        <li>Cao, K. et al. "Learning Imbalanced Datasets with Label-Distribution-Aware Margin Loss." NeurIPS, 2019.</li>
+        <li>Han, X. et al. "FuseMoE: Mixture-of-Experts Transformers for Fleximodal Fusion." NeurIPS, 2024.</li>
+        <li>Johnson, A.E.W. et al. "MIMIC-IV, a freely accessible electronic health record dataset." Scientific Data, 2023.</li>
+        <li>Menon, A.K. et al. "Long-tail Learning via Logit Adjustment." ICLR, 2021.</li>
+        <li>Mildenberger, J. et al. "A Tale of Two Classes: Adapting Supervised Contrastive Learning to Binary Imbalanced Scenarios." CVPR, 2025.</li>
+        <li>Wang, X. et al. "Long-tailed Recognition by Routing Diverse Distribution-Aware Experts." ICLR, 2021.</li>
+      </ol>
+    </div>
+  </section>
+
+</div>
+
+<footer>
+  Department of Computing, Imperial College London &nbsp;|&nbsp;
+  <a href="https://github.com/igorlima1740">GitHub</a>
+</footer>
+
+<!-- ════════════════════════════════════════════════ -->
+<!-- Collapse Animation Script                        -->
+<!-- ════════════════════════════════════════════════ -->
+<script>
+(() => {
+  const canvas = document.getElementById('collapseCanvas');
+  const ctx = canvas.getContext('2d');
+
+  let W, H, dpr;
+  const MINORITY_COLOR = '#4A90D9';   // blue
+  const MAJORITY_COLOR = '#D9634A';   // rust
+  const TRAIL_ALPHA = 0.03;
+
+  // Particle system
+  const NUM_MAJORITY = 60;
+  const NUM_MINORITY = 8;
+  let particles = [];
+  let phase = 0;         // 0 = separated, 1 = collapsing, 2 = collapsed
+  let phaseTime = 0;
+  const PHASE_DURATIONS = [3000, 3000, 2500]; // ms per phase
+  let collapseTarget = { x: 0, y: 0 };
+
+  function resize() {
+    dpr = window.devicePixelRatio || 1;
+    W = canvas.clientWidth;
+    H = canvas.clientHeight;
+    canvas.width = W * dpr;
+    canvas.height = H * dpr;
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    collapseTarget = { x: W * 0.5, y: H * 0.5 };
+  }
+
+  class Particle {
+    constructor(isMinority) {
+      this.isMinority = isMinority;
+      this.color = isMinority ? MINORITY_COLOR : MAJORITY_COLOR;
+      this.r = isMinority ? 4 : 3;
+      this.reset();
+    }
+
+    reset() {
+      // Separated positions: minority top-left quadrant, majority bottom-right
+      if (this.isMinority) {
+        this.homeX = W * 0.3 + (Math.random() - 0.5) * W * 0.12;
+        this.homeY = H * 0.35 + (Math.random() - 0.5) * H * 0.12;
+      } else {
+        this.homeX = W * 0.7 + (Math.random() - 0.5) * W * 0.15;
+        this.homeY = H * 0.65 + (Math.random() - 0.5) * H * 0.15;
+      }
+      this.x = this.homeX;
+      this.y = this.homeY;
+      this.vx = 0;
+      this.vy = 0;
+      // Gentle wobble
+      this.wobbleAmp = 0.3 + Math.random() * 0.5;
+      this.wobbleFreq = 0.001 + Math.random() * 0.002;
+      this.wobblePhase = Math.random() * Math.PI * 2;
+    }
+
+    update(dt, t) {
+      let targetX, targetY;
+
+      if (phase === 0) {
+        // Float near home
+        targetX = this.homeX + Math.sin(t * this.wobbleFreq + this.wobblePhase) * this.wobbleAmp * 20;
+        targetY = this.homeY + Math.cos(t * this.wobbleFreq * 1.3 + this.wobblePhase) * this.wobbleAmp * 20;
+        const ease = 0.02;
+        this.vx += (targetX - this.x) * ease;
+        this.vy += (targetY - this.y) * ease;
+      } else if (phase === 1) {
+        // Collapse toward center — majority pulls minority in
+        const progress = Math.min(phaseTime / PHASE_DURATIONS[1], 1);
+        const eased = progress * progress * (3 - 2 * progress); // smoothstep
+        targetX = this.homeX + (collapseTarget.x - this.homeX) * eased;
+        targetY = this.homeY + (collapseTarget.y - this.homeY) * eased;
+        const ease = 0.06;
+        this.vx += (targetX - this.x) * ease;
+        this.vy += (targetY - this.y) * ease;
+      } else {
+        // Collapsed — tight jitter
+        const jitter = this.isMinority ? 2 : 4;
+        targetX = collapseTarget.x + Math.sin(t * 0.005 + this.wobblePhase) * jitter;
+        targetY = collapseTarget.y + Math.cos(t * 0.004 + this.wobblePhase) * jitter;
+        const ease = 0.08;
+        this.vx += (targetX - this.x) * ease;
+        this.vy += (targetY - this.y) * ease;
+      }
+
+      this.vx *= 0.9;
+      this.vy *= 0.9;
+      this.x += this.vx;
+      this.y += this.vy;
+    }
+
+    draw() {
+      ctx.beginPath();
+      ctx.arc(this.x, this.y, this.r, 0, Math.PI * 2);
+      ctx.fillStyle = this.color;
+      ctx.fill();
+
+      // Glow
+      ctx.beginPath();
+      ctx.arc(this.x, this.y, this.r * 3, 0, Math.PI * 2);
+      const grad = ctx.createRadialGradient(this.x, this.y, this.r, this.x, this.y, this.r * 3);
+      grad.addColorStop(0, this.color + '40');
+      grad.addColorStop(1, this.color + '00');
+      ctx.fillStyle = grad;
+      ctx.fill();
+    }
+  }
+
+  function initParticles() {
+    particles = [];
+    for (let i = 0; i < NUM_MAJORITY; i++) particles.push(new Particle(false));
+    for (let i = 0; i < NUM_MINORITY; i++) particles.push(new Particle(true));
+  }
+
+  // Phase labels
+  function drawLabels() {
+    ctx.font = '600 13px system-ui, sans-serif';
+    ctx.textAlign = 'center';
+
+    if (phase === 0) {
+      ctx.fillStyle = MINORITY_COLOR + 'AA';
+      ctx.fillText('minority class', W * 0.3, H * 0.25);
+      ctx.fillStyle = MAJORITY_COLOR + 'AA';
+      ctx.fillText('majority class', W * 0.7, H * 0.8);
+    } else if (phase === 2) {
+      ctx.fillStyle = 'rgba(255,100,80,0.7)';
+      ctx.font = '600 14px system-ui, sans-serif';
+      ctx.fillText('single-point collapse', collapseTarget.x, collapseTarget.y - 40);
+      ctx.font = '400 12px system-ui, sans-serif';
+      ctx.fillStyle = 'rgba(255,255,255,0.35)';
+      ctx.fillText('gradients \u2192 0', collapseTarget.x, collapseTarget.y + 45);
+    }
+  }
+
+  let lastTime = 0;
+  let globalTime = 0;
+
+  function loop(ts) {
+    const dt = Math.min(ts - lastTime, 50);
+    lastTime = ts;
+    globalTime += dt;
+    phaseTime += dt;
+
+    // Phase transitions
+    if (phaseTime > PHASE_DURATIONS[phase]) {
+      phaseTime = 0;
+      phase = (phase + 1) % 3;
+      if (phase === 0) {
+        // Reset to separated
+        particles.forEach(p => p.reset());
+      }
+    }
+
+    // Fade trail
+    ctx.fillStyle = `rgba(10, 22, 40, ${0.15})`;
+    ctx.fillRect(0, 0, W, H);
+
+    particles.forEach(p => {
+      p.update(dt, globalTime);
+      p.draw();
+    });
+
+    drawLabels();
+    requestAnimationFrame(loop);
+  }
+
+  window.addEventListener('resize', () => {
+    resize();
+    collapseTarget = { x: W * 0.5, y: H * 0.5 };
+    particles.forEach(p => p.reset());
+  });
+
+  resize();
+  initParticles();
+  requestAnimationFrame(loop);
+})();
+</script>
+
+</body>
+</html>
