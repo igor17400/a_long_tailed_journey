@@ -29,32 +29,21 @@
       line-height: 1.65;
     }
 
-    /* ── Hero / Collapse Animation ── */
+    /* ── Hero ── */
     .hero {
       position: relative;
       width: 100%;
-      height: 100vh;
-      min-height: 600px;
       background: var(--hero-bg);
-      overflow: hidden;
       display: flex;
       flex-direction: column;
       align-items: center;
       justify-content: center;
-    }
-
-    .hero canvas {
-      position: absolute;
-      top: 0; left: 0;
-      width: 100%; height: 100%;
+      padding: 4rem 2rem;
     }
 
     .hero-content {
-      position: relative;
-      z-index: 2;
       text-align: center;
       max-width: 900px;
-      padding: 0 2rem;
     }
 
     .hero-content h1 {
@@ -83,44 +72,134 @@
       border-bottom: 1px solid rgba(255,255,255,0.25);
     }
 
-    .hero-label {
-      position: absolute;
-      z-index: 2;
-      bottom: 2.5rem;
-      left: 50%;
-      transform: translateX(-50%);
-      font-size: 0.8rem;
-      color: rgba(255,255,255,0.35);
-      letter-spacing: 0.15em;
-      text-transform: uppercase;
+    .hero-buttons {
+      display: flex;
+      gap: 1rem;
+      justify-content: center;
+      margin-top: 2rem;
+      flex-wrap: wrap;
     }
 
-    .scroll-indicator {
+    .hero-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.7rem 1.5rem;
+      border-radius: 8px;
+      font-size: 0.95rem;
+      font-weight: 600;
+      text-decoration: none;
+      cursor: pointer;
+      border: none;
+      transition: transform 0.15s, box-shadow 0.15s;
+    }
+
+    .hero-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(0,0,0,0.3);
+    }
+
+    .hero-btn.primary {
+      background: #fff;
+      color: var(--imperial-blue);
+    }
+
+    .hero-btn.secondary {
+      background: rgba(255,255,255,0.12);
+      color: #fff;
+      border: 1px solid rgba(255,255,255,0.25);
+    }
+
+    .hero-btn .btn-icon {
+      font-size: 1.1rem;
+    }
+
+    /* ── Collapse Animation Modal ── */
+    .anim-overlay {
+      display: none;
+      position: fixed;
+      inset: 0;
+      z-index: 1000;
+      background: #fff;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .anim-overlay.active { display: flex; }
+
+    .anim-close {
       position: absolute;
-      z-index: 2;
-      bottom: 1rem;
-      left: 50%;
-      transform: translateX(-50%);
-      width: 24px;
-      height: 38px;
-      border: 2px solid rgba(255,255,255,0.25);
+      top: 1.5rem; right: 1.5rem;
+      background: none; border: none;
+      color: rgba(0,0,0,0.3);
+      font-size: 1.8rem;
+      cursor: pointer;
+      z-index: 1001;
+    }
+
+    .anim-close:hover { color: #333; }
+
+    .anim-stage {
+      text-align: center;
+      max-width: 700px;
+      padding: 0 1.5rem;
+    }
+
+    .anim-stage h3 {
+      font-size: 1.1rem;
+      color: var(--imperial-blue);
+      font-weight: 700;
+      margin-bottom: 0.5rem;
+    }
+
+    .anim-stage p {
+      font-size: 0.9rem;
+      color: var(--muted);
+      margin-bottom: 1.2rem;
+      line-height: 1.5;
+    }
+
+    .anim-canvas-wrap {
+      background: #f9f8f6;
+      border: 1px solid var(--border);
       border-radius: 12px;
+      padding: 1rem;
+      margin-bottom: 1.5rem;
     }
-    .scroll-indicator::after {
-      content: '';
-      position: absolute;
-      top: 6px;
-      left: 50%;
-      transform: translateX(-50%);
-      width: 4px;
-      height: 8px;
-      background: rgba(255,255,255,0.4);
-      border-radius: 2px;
-      animation: scrollPulse 2s ease-in-out infinite;
+
+    .anim-canvas-wrap svg {
+      width: 100%;
+      max-width: 560px;
+      height: auto;
     }
-    @keyframes scrollPulse {
-      0%, 100% { opacity: 1; transform: translateX(-50%) translateY(0); }
-      50% { opacity: 0.3; transform: translateX(-50%) translateY(10px); }
+
+    .anim-controls {
+      display: flex;
+      gap: 0.8rem;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .anim-controls button {
+      padding: 0.5rem 1.2rem;
+      border-radius: 6px;
+      border: 1px solid var(--border);
+      background: var(--card);
+      color: var(--text);
+      font-size: 0.85rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background 0.15s, border-color 0.15s;
+    }
+
+    .anim-controls button:hover { background: #f0eeeb; border-color: #ccc; }
+    .anim-controls button:disabled { opacity: 0.3; cursor: default; }
+
+    .anim-step-indicator {
+      font-size: 0.8rem;
+      color: var(--muted);
+      letter-spacing: 0.08em;
     }
 
     /* ── Main Content ── */
@@ -263,6 +342,20 @@
     .method-card p, .method-card .formula {
       font-size: 0.92rem;
       color: #444;
+    }
+
+    .method-figure {
+      margin-top: 0.8rem;
+      background: #f9f8f6;
+      border-radius: 8px;
+      padding: 0.6rem;
+      display: flex;
+      justify-content: center;
+    }
+
+    .method-figure svg {
+      width: 100%;
+      height: auto;
     }
 
     .formula {
@@ -432,7 +525,6 @@
 <!-- HERO: Single-Point Collapse Animation           -->
 <!-- ════════════════════════════════════════════════ -->
 <section class="hero">
-  <canvas id="collapseCanvas"></canvas>
   <div class="hero-content">
     <h1>A Long-Tailed Journey</h1>
     <p class="subtitle">Navigating Class Imbalance in Extreme Binary Classification in Multimodal Clinical Data</p>
@@ -440,10 +532,35 @@
       <a href="https://github.com/igorlima1740">Igor L.R. Azevedo</a> &amp; Pedro A.M. Mediano<br>
       Department of Computing, Imperial College London
     </p>
+    <div class="hero-buttons">
+      <a class="hero-btn primary" href="presentation.pdf" target="_blank">
+        <span class="btn-icon">&#128196;</span> Long-Tailed Learning Presentation
+      </a>
+      <button class="hero-btn secondary" id="openAnimBtn">
+        <span class="btn-icon">&#9654;</span> Animation: Single-Point Collapse
+      </button>
+    </div>
   </div>
-  <div class="hero-label">single-point collapse under 99:1 imbalance</div>
-  <div class="scroll-indicator"></div>
 </section>
+
+<!-- ════════════════════════════════════════════════ -->
+<!-- Collapse Animation (step-by-step overlay)       -->
+<!-- ════════════════════════════════════════════════ -->
+<div class="anim-overlay" id="animOverlay">
+  <button class="anim-close" id="animClose">&times;</button>
+  <div class="anim-stage">
+    <h3 id="animTitle"></h3>
+    <p id="animDesc"></p>
+    <div class="anim-canvas-wrap">
+      <svg id="animSvg" viewBox="0 0 560 300" xmlns="http://www.w3.org/2000/svg"></svg>
+    </div>
+    <div class="anim-controls">
+      <button id="animPrev">&#8592; Back</button>
+      <span class="anim-step-indicator" id="animIndicator"></span>
+      <button id="animNext">Next &#8594;</button>
+    </div>
+  </div>
+</div>
 
 <!-- ════════════════════════════════════════════════ -->
 <!-- PROBLEM STATEMENT                                -->
@@ -481,33 +598,467 @@
         <h3><span class="method-tag rebalancing">Re-balancing</span> LDAM</h3>
         <p>Label-Distribution-Aware Margin Loss. Enforces class-dependent margins proportional to class frequency, pushing the decision boundary away from rare classes.</p>
         <div class="formula">&Delta;<sub>y</sub> = C / n<sub>y</sub><sup>1/4</sup></div>
+        <div class="method-figure">
+          <svg viewBox="0 0 420 200" xmlns="http://www.w3.org/2000/svg">
+            <!-- LEFT PANEL: Standard CE -->
+            <text x="75" y="18" text-anchor="middle" font-size="11" font-weight="700" fill="#1a1a1a">Standard CE</text>
+            <!-- Decision boundary -->
+            <line x1="75" y1="25" x2="75" y2="160" stroke="#1a1a1a" stroke-width="1.5"/>
+            <text x="75" y="172" text-anchor="middle" font-size="8" fill="#1a1a1a">boundary</text>
+            <!-- Symmetric margin band -->
+            <rect x="65" y="25" width="20" height="135" fill="#555" opacity="0.06"/>
+            <line x1="65" y1="25" x2="65" y2="160" stroke="#888" stroke-width="0.6" stroke-dasharray="3,2"/>
+            <line x1="85" y1="25" x2="85" y2="160" stroke="#888" stroke-width="0.6" stroke-dasharray="3,2"/>
+            <!-- Margin annotations -->
+            <line x1="65" y1="178" x2="75" y2="178" stroke="#555" stroke-width="0.5" marker-start="url(#arrowL)" marker-end="url(#arrowR)"/>
+            <text x="70" y="190" text-anchor="middle" font-size="8" fill="#555" font-style="italic">Δ</text>
+            <line x1="75" y1="178" x2="85" y2="178" stroke="#555" stroke-width="0.5"/>
+            <text x="80" y="190" text-anchor="middle" font-size="8" fill="#555" font-style="italic">Δ</text>
+            <!-- Head class (rust, many, left) -->
+            <circle cx="15" cy="45" r="4" fill="#B8472A"/><circle cx="25" cy="65" r="4" fill="#B8472A"/>
+            <circle cx="35" cy="90" r="4" fill="#B8472A"/><circle cx="20" cy="110" r="4" fill="#B8472A"/>
+            <circle cx="42" cy="72" r="4" fill="#B8472A"/><circle cx="30" cy="130" r="4" fill="#B8472A"/>
+            <circle cx="12" cy="85" r="4" fill="#B8472A"/><circle cx="48" cy="50" r="4" fill="#B8472A"/>
+            <circle cx="28" cy="125" r="4" fill="#B8472A"/><circle cx="40" cy="140" r="4" fill="#B8472A"/>
+            <circle cx="50" cy="60" r="4" fill="#B8472A"/><circle cx="44" cy="105" r="4" fill="#B8472A"/>
+            <circle cx="18" cy="38" r="4" fill="#B8472A"/><circle cx="55" cy="115" r="4" fill="#B8472A"/>
+            <circle cx="32" cy="145" r="4" fill="#B8472A"/>
+            <!-- Tail class (blue, few, right) -->
+            <circle cx="120" cy="55" r="4" fill="#4A90D9"/><circle cx="130" cy="100" r="4" fill="#4A90D9"/>
+            <circle cx="115" cy="130" r="4" fill="#4A90D9"/>
+
+            <!-- SEPARATOR -->
+            <line x1="170" y1="10" x2="170" y2="195" stroke="#888" stroke-width="0.5"/>
+            <path d="M160,95 L180,95" stroke="#B8472A" stroke-width="1.5" marker-end="url(#arrowRust)"/>
+            <defs>
+              <marker id="arrowRust" markerWidth="6" markerHeight="6" refX="5" refY="3" orient="auto"><path d="M0,0 L6,3 L0,6" fill="#B8472A"/></marker>
+            </defs>
+
+            <!-- RIGHT PANEL: LDAM -->
+            <text x="290" y="18" text-anchor="middle" font-size="11" font-weight="700" fill="#B8472A">LDAM</text>
+            <!-- Decision boundary -->
+            <line x1="280" y1="25" x2="280" y2="160" stroke="#1a1a1a" stroke-width="1.5"/>
+            <text x="280" y="172" text-anchor="middle" font-size="8" fill="#1a1a1a">boundary</text>
+            <!-- Head margin (narrow, left) -->
+            <rect x="265" y="25" width="15" height="135" fill="#B8472A" opacity="0.06"/>
+            <line x1="265" y1="25" x2="265" y2="160" stroke="#B8472A" stroke-width="0.6" stroke-dasharray="3,2"/>
+            <!-- Tail margin (wide, right) -->
+            <rect x="280" y="25" width="45" height="135" fill="#4A90D9" opacity="0.06"/>
+            <line x1="325" y1="25" x2="325" y2="160" stroke="#4A90D9" stroke-width="0.8" stroke-dasharray="3,2"/>
+            <!-- Margin annotations -->
+            <line x1="265" y1="178" x2="280" y2="178" stroke="#B8472A" stroke-width="0.6"/>
+            <text x="272" y="190" text-anchor="middle" font-size="8" font-weight="700" fill="#B8472A">Δ₁</text>
+            <text x="272" y="198" text-anchor="middle" font-size="7" fill="#555">small</text>
+            <line x1="280" y1="178" x2="325" y2="178" stroke="#4A90D9" stroke-width="0.6"/>
+            <text x="302" y="190" text-anchor="middle" font-size="8" font-weight="700" fill="#4A90D9">Δ₂</text>
+            <text x="302" y="198" text-anchor="middle" font-size="7" fill="#555">large</text>
+            <!-- Head class (rust, many, left) -->
+            <circle cx="210" cy="45" r="4" fill="#B8472A"/><circle cx="220" cy="65" r="4" fill="#B8472A"/>
+            <circle cx="230" cy="90" r="4" fill="#B8472A"/><circle cx="215" cy="110" r="4" fill="#B8472A"/>
+            <circle cx="237" cy="72" r="4" fill="#B8472A"/><circle cx="225" cy="130" r="4" fill="#B8472A"/>
+            <circle cx="207" cy="85" r="4" fill="#B8472A"/><circle cx="243" cy="50" r="4" fill="#B8472A"/>
+            <circle cx="223" cy="125" r="4" fill="#B8472A"/><circle cx="235" cy="140" r="4" fill="#B8472A"/>
+            <circle cx="245" cy="60" r="4" fill="#B8472A"/><circle cx="239" cy="105" r="4" fill="#B8472A"/>
+            <circle cx="213" cy="38" r="4" fill="#B8472A"/><circle cx="250" cy="115" r="4" fill="#B8472A"/>
+            <circle cx="227" cy="145" r="4" fill="#B8472A"/>
+            <!-- Tail class (blue, few, right, pushed further out) -->
+            <circle cx="355" cy="55" r="4" fill="#4A90D9"/><circle cx="365" cy="100" r="4" fill="#4A90D9"/>
+            <circle cx="350" cy="130" r="4" fill="#4A90D9"/>
+            <!-- Labels -->
+            <text x="225" y="198" text-anchor="middle" font-size="7" fill="#B8472A" font-variant="small-caps">head</text>
+            <text x="355" y="198" text-anchor="middle" font-size="7" fill="#4A90D9" font-variant="small-caps">tail</text>
+          </svg>
+        </div>
       </div>
 
       <div class="method-card rebalancing">
         <h3><span class="method-tag rebalancing">Re-balancing</span> Logit Adjustment</h3>
         <p>Shifts logits by class priors to achieve Fisher-consistent balanced error. Simple post-hoc or during-training correction.</p>
         <div class="formula">logit<sub>y</sub> &rarr; logit<sub>y</sub> + &tau; &middot; log(&pi;<sub>y</sub>)</div>
+        <div class="method-figure">
+          <svg viewBox="0 0 420 180" xmlns="http://www.w3.org/2000/svg">
+            <defs>
+              <marker id="arrAdj" markerWidth="7" markerHeight="7" refX="6" refY="3.5" orient="auto"><path d="M0,0 L7,3.5 L0,7" fill="#3D8B37"/></marker>
+            </defs>
+
+            <!-- ═══ LEFT: Raw logits ═══ -->
+            <text x="95" y="18" text-anchor="middle" font-size="10" font-weight="700" fill="#333">Raw logits</text>
+            <!-- Baseline -->
+            <line x1="30" y1="145" x2="170" y2="145" stroke="#ccc" stroke-width="0.5"/>
+            <!-- Bar A (head class, tall, blue) -->
+            <rect x="42" y="45" width="28" height="100" rx="2" fill="#4A90D9" opacity="0.5"/>
+            <text x="56" y="38" text-anchor="middle" font-size="9" fill="#4A90D9">2.5</text>
+            <text x="56" y="158" text-anchor="middle" font-size="9" fill="#333">A</text>
+            <!-- Bar B (medium, gray) -->
+            <rect x="82" y="65" width="28" height="80" rx="2" fill="#888" opacity="0.35"/>
+            <text x="96" y="58" text-anchor="middle" font-size="9" fill="#888">2.0</text>
+            <text x="96" y="158" text-anchor="middle" font-size="9" fill="#333">B</text>
+            <!-- Bar C (tail class, short, red) -->
+            <rect x="122" y="105" width="28" height="40" rx="2" fill="#cc3333" opacity="0.5"/>
+            <text x="136" y="98" text-anchor="middle" font-size="9" fill="#cc3333">1.8</text>
+            <text x="136" y="158" text-anchor="middle" font-size="9" fill="#333">C</text>
+            <!-- Prediction -->
+            <text x="95" y="175" text-anchor="middle" font-size="9" font-weight="700" fill="#4A90D9">ŷ = A</text>
+
+            <!-- ═══ Arrow ═══ -->
+            <line x1="180" y1="95" x2="225" y2="95" stroke="#3D8B37" stroke-width="2" marker-end="url(#arrAdj)"/>
+            <text x="203" y="78" text-anchor="middle" font-size="9" fill="#555">+τ log π<tspan font-size="7" baseline-shift="sub">y</tspan></text>
+
+            <!-- ═══ RIGHT: Adjusted logits ═══ -->
+            <text x="325" y="18" text-anchor="middle" font-size="10" font-weight="700" fill="#333">Adjusted</text>
+            <!-- Baseline -->
+            <line x1="250" y1="145" x2="400" y2="145" stroke="#ccc" stroke-width="0.5"/>
+            <!-- Bar A (head, shrunk, faded blue) -->
+            <rect x="265" y="80" width="28" height="65" rx="2" fill="#4A90D9" opacity="0.2"/>
+            <text x="279" y="73" text-anchor="middle" font-size="9" fill="#4A90D9" opacity="0.5">2.7</text>
+            <text x="279" y="158" text-anchor="middle" font-size="9" fill="#333">A</text>
+            <!-- Bar B (medium, grew a bit) -->
+            <rect x="307" y="55" width="28" height="90" rx="2" fill="#888" opacity="0.35"/>
+            <text x="321" y="48" text-anchor="middle" font-size="9" fill="#888">3.9</text>
+            <text x="321" y="158" text-anchor="middle" font-size="9" fill="#333">B</text>
+            <!-- Bar C (tail, now tallest, strong red) -->
+            <rect x="349" y="35" width="28" height="110" rx="2" fill="#cc3333" opacity="0.6"/>
+            <text x="363" y="28" text-anchor="middle" font-size="9" font-weight="700" fill="#cc3333">4.8</text>
+            <text x="363" y="158" text-anchor="middle" font-size="9" fill="#333">C</text>
+            <!-- Prediction -->
+            <text x="325" y="175" text-anchor="middle" font-size="9" font-weight="700" fill="#cc3333">ŷ = C &#10003;</text>
+          </svg>
+        </div>
       </div>
 
       <div class="method-card routing">
         <h3><span class="method-tag routing">Routing</span> RIDE</h3>
         <p>Routing Diverse Distribution-Aware Experts. Multiple expert branches with LDAM loss and KL-divergence diversity, so each expert specialises in different regions of the class distribution.</p>
+        <div class="method-figure">
+          <svg viewBox="0 0 480 340" xmlns="http://www.w3.org/2000/svg">
+            <defs>
+              <marker id="arrB" markerWidth="6" markerHeight="6" refX="5" refY="3" orient="auto"><path d="M0,0 L6,3 L0,6" fill="#888"/></marker>
+              <marker id="arrBlue" markerWidth="6" markerHeight="6" refX="5" refY="3" orient="auto"><path d="M0,0 L6,3 L0,6" fill="#4A90D9"/></marker>
+              <marker id="arrOrange" markerWidth="6" markerHeight="6" refX="5" refY="3" orient="auto"><path d="M0,0 L6,3 L0,6" fill="#D4882B"/></marker>
+              <marker id="arrGreen" markerWidth="6" markerHeight="6" refX="5" refY="3" orient="auto"><path d="M0,0 L6,3 L0,6" fill="#3D8B37"/></marker>
+            </defs>
+
+            <!-- ═══ TOP: Architecture ═══ -->
+            <text x="155" y="14" text-anchor="middle" font-size="10" font-weight="700" fill="#333">Routing Diverse Experts (RIDE)</text>
+
+            <!-- Input feature vector (colored bar) -->
+            <rect x="8" y="38" width="8" height="8" fill="#4A90D9" opacity="0.6" rx="1"/><rect x="8" y="47" width="8" height="8" fill="#4A90D9" opacity="0.3" rx="1"/>
+            <rect x="8" y="56" width="8" height="8" fill="#4A90D9" opacity="0.5" rx="1"/><rect x="8" y="65" width="8" height="8" fill="#4A90D9" opacity="0.7" rx="1"/>
+            <rect x="8" y="74" width="8" height="8" fill="#4A90D9" opacity="0.4" rx="1"/><rect x="8" y="83" width="8" height="8" fill="#4A90D9" opacity="0.55" rx="1"/>
+            <rect x="8" y="92" width="8" height="8" fill="#4A90D9" opacity="0.25" rx="1"/><rect x="8" y="101" width="8" height="8" fill="#4A90D9" opacity="0.65" rx="1"/>
+            <text x="12" y="120" text-anchor="middle" font-size="8" font-weight="700" fill="#666">x</text>
+            <line x1="18" y1="70" x2="32" y2="70" stroke="#888" stroke-width="0.8" marker-end="url(#arrB)"/>
+
+            <!-- Backbone (frozen, gray) -->
+            <rect x="35" y="48" width="50" height="44" rx="4" fill="#aaa" fill-opacity="0.15" stroke="#aaa" stroke-width="1"/>
+            <text x="60" y="68" text-anchor="middle" font-size="9" fill="#555">f<tspan font-size="7" baseline-shift="sub">θ</tspan></text>
+            <text x="60" y="80" text-anchor="middle" font-size="7" fill="#aaa" font-style="italic">frozen</text>
+
+            <!-- Routing gate (dial icon) -->
+            <circle cx="100" cy="70" r="8" fill="white" stroke="#888" stroke-width="1"/>
+            <line x1="100" y1="70" x2="105" y2="64" stroke="#666" stroke-width="1.2" stroke-linecap="round"/>
+            <circle cx="100" cy="70" r="1.5" fill="#666"/>
+
+            <!-- Branch arrows to experts -->
+            <line x1="108" y1="66" x2="125" y2="40" stroke="#aaa" stroke-width="0.8" marker-end="url(#arrB)"/>
+            <line x1="108" y1="70" x2="125" y2="70" stroke="#4A90D9" stroke-width="0.8" marker-end="url(#arrBlue)"/>
+            <line x1="108" y1="74" x2="125" y2="100" stroke="#aaa" stroke-width="0.8" stroke-dasharray="3,2" marker-end="url(#arrB)"/>
+
+            <!-- Expert 1 (frozen, gray) -->
+            <rect x="128" y="26" width="58" height="28" rx="3" fill="#aaa" fill-opacity="0.12" stroke="#aaa" stroke-width="0.8"/>
+            <text x="157" y="44" text-anchor="middle" font-size="8" fill="#555">ψ<tspan font-size="6" baseline-shift="sub">θ₁</tspan></text>
+
+            <!-- Expert 2 (trainable, blue) -->
+            <rect x="128" y="56" width="58" height="28" rx="3" fill="#4A90D9" fill-opacity="0.12" stroke="#4A90D9" stroke-width="0.8"/>
+            <text x="157" y="74" text-anchor="middle" font-size="8" fill="#333">ψ<tspan font-size="6" baseline-shift="sub">θ₂</tspan></text>
+
+            <!-- Dots -->
+            <text x="157" y="94" text-anchor="middle" font-size="10" fill="#555">⋮</text>
+
+            <!-- Expert n (frozen, gray) -->
+            <rect x="128" y="98" width="58" height="28" rx="3" fill="#aaa" fill-opacity="0.12" stroke="#aaa" stroke-width="0.8"/>
+            <text x="157" y="116" text-anchor="middle" font-size="8" fill="#555">ψ<tspan font-size="6" baseline-shift="sub">θₙ</tspan></text>
+
+            <!-- Routing gate before expert n -->
+            <circle cx="118" cy="112" r="6" fill="white" stroke="#888" stroke-width="0.8"/>
+            <line x1="118" y1="112" x2="115" y2="107" stroke="#666" stroke-width="0.8" stroke-linecap="round"/>
+            <circle cx="118" cy="112" r="1" fill="#666"/>
+
+            <!-- Aggregation -->
+            <rect x="210" y="54" width="42" height="32" rx="4" fill="white" stroke="#888" stroke-width="1"/>
+            <text x="231" y="74" text-anchor="middle" font-size="8" fill="#333">Σ logits</text>
+            <!-- Arrows experts -> aggregation -->
+            <line x1="187" y1="40" x2="210" y2="40" stroke="#D4882B" stroke-width="0.7"/>
+            <line x1="210" y1="40" x2="210" y2="56" stroke="#D4882B" stroke-width="0.7" marker-end="url(#arrOrange)"/>
+            <line x1="187" y1="70" x2="209" y2="70" stroke="#4A90D9" stroke-width="0.7" marker-end="url(#arrBlue)"/>
+            <line x1="187" y1="112" x2="210" y2="112" stroke="#3D8B37" stroke-width="0.7" stroke-dasharray="3,2"/>
+            <line x1="210" y1="112" x2="210" y2="87" stroke="#3D8B37" stroke-width="0.7" stroke-dasharray="3,2" marker-end="url(#arrGreen)"/>
+
+            <!-- Output y-hat -->
+            <rect x="268" y="58" width="32" height="24" rx="4" fill="white" stroke="#888" stroke-width="1"/>
+            <text x="284" y="74" text-anchor="middle" font-size="9" fill="#333">ŷ</text>
+            <line x1="253" y1="70" x2="267" y2="70" stroke="#888" stroke-width="0.8" marker-end="url(#arrB)"/>
+
+            <!-- ═══ RIGHT: Distribution Plots ═══ -->
+            <!-- Expert 1 routing weights (orange, peaks left = head) -->
+            <rect x="320" y="22" width="150" height="38" rx="3" fill="#f9f8f6" stroke="#eee" stroke-width="0.5"/>
+            <text x="465" y="33" text-anchor="end" font-size="7" font-weight="700" fill="#D4882B">Expert 1</text>
+            <!-- Gray reference distribution -->
+            <polyline points="325,55 340,48 355,44 370,42 385,41 400,40.5 415,40 430,39.8 445,39.5 460,39.2 465,39" fill="none" stroke="#ccc" stroke-width="0.5"/>
+            <!-- Orange routing curve -->
+            <polyline points="325,26 335,28 345,32 355,38 365,44 375,48 385,51 400,53 415,54 430,55 445,55.5 465,56" fill="none" stroke="#D4882B" stroke-width="1.2"/>
+            <polygon points="325,26 335,28 345,32 355,38 365,44 375,48 385,51 400,53 415,54 430,55 445,55.5 465,56 465,57 325,57" fill="#D4882B" opacity="0.12"/>
+            <text x="393" y="62" text-anchor="middle" font-size="6" fill="#888">class index</text>
+
+            <!-- Expert 2 routing weights (blue, peaks center = medium) -->
+            <rect x="320" y="68" width="150" height="38" rx="3" fill="#f9f8f6" stroke="#eee" stroke-width="0.5"/>
+            <text x="465" y="78" text-anchor="end" font-size="7" font-weight="700" fill="#4A90D9">Expert 2</text>
+            <polyline points="325,102 340,100 355,96 365,90 375,84 385,78 393,75 400,76 410,80 420,86 430,91 440,96 450,100 465,102" fill="none" stroke="#4A90D9" stroke-width="1.2"/>
+            <polygon points="325,102 340,100 355,96 365,90 375,84 385,78 393,75 400,76 410,80 420,86 430,91 440,96 450,100 465,102 465,103 325,103" fill="#4A90D9" opacity="0.12"/>
+            <text x="393" y="108" text-anchor="middle" font-size="6" fill="#888">class index</text>
+
+            <!-- Expert 3 routing weights (green, peaks right = tail) -->
+            <rect x="320" y="114" width="150" height="38" rx="3" fill="#f9f8f6" stroke="#eee" stroke-width="0.5"/>
+            <text x="465" y="125" text-anchor="end" font-size="7" font-weight="700" fill="#3D8B37">Expert 3</text>
+            <polyline points="325,148 340,148 355,147 370,146 385,144 400,140 415,134 430,126 445,120 455,118 465,117" fill="none" stroke="#3D8B37" stroke-width="1.2"/>
+            <polygon points="325,148 340,148 355,147 370,146 385,144 400,140 415,134 430,126 445,120 455,118 465,117 465,149 325,149" fill="#3D8B37" opacity="0.12"/>
+            <text x="393" y="155" text-anchor="middle" font-size="6" fill="#888">class index</text>
+            <text x="393" y="19" text-anchor="middle" font-size="7" fill="#666">Routing weight per class</text>
+
+            <!-- ═══ BOTTOM: Learned Routing ═══ -->
+            <line x1="5" y1="168" x2="475" y2="168" stroke="#ddd" stroke-width="0.5"/>
+            <text x="12" y="184" font-size="9" font-weight="700" fill="#333">Learned Routing</text>
+
+            <!-- Head sample → Expert 1 active -->
+            <text x="12" y="210" font-size="8" fill="#666">head sample</text>
+            <line x1="72" y1="207" x2="88" y2="207" stroke="#888" stroke-width="0.7" marker-end="url(#arrB)"/>
+            <!-- Expert 1 active -->
+            <rect x="92" y="196" width="55" height="22" rx="3" fill="#D4882B" fill-opacity="0.15" stroke="#D4882B" stroke-width="1"/>
+            <text x="119" y="210" text-anchor="middle" font-size="8" fill="#333">ψ<tspan font-size="6" baseline-shift="sub">θ₁</tspan></text>
+            <text x="119" y="194" text-anchor="middle" font-size="10" fill="#3D8B37">&#10003;</text>
+            <!-- Expert 2 inactive -->
+            <rect x="156" y="196" width="55" height="22" rx="3" fill="#aaa" fill-opacity="0.05" stroke="#ccc" stroke-width="0.6"/>
+            <text x="183" y="210" text-anchor="middle" font-size="8" fill="#ccc">ψ<tspan font-size="6" baseline-shift="sub">θ₂</tspan></text>
+            <text x="183" y="194" text-anchor="middle" font-size="9" fill="#daa">&#10007;</text>
+            <!-- Expert 3 inactive -->
+            <rect x="220" y="196" width="55" height="22" rx="3" fill="#aaa" fill-opacity="0.05" stroke="#ccc" stroke-width="0.6"/>
+            <text x="247" y="210" text-anchor="middle" font-size="8" fill="#ccc">ψ<tspan font-size="6" baseline-shift="sub">θ₃</tspan></text>
+            <text x="247" y="194" text-anchor="middle" font-size="9" fill="#daa">&#10007;</text>
+            <!-- Output -->
+            <line x1="276" y1="207" x2="292" y2="207" stroke="#D4882B" stroke-width="0.7" marker-end="url(#arrOrange)"/>
+            <text x="296" y="210" font-size="7" fill="#333">ŷ (head expert dominates)</text>
+
+            <!-- Tail sample → Expert 3 active -->
+            <text x="12" y="244" font-size="8" fill="#666">tail sample</text>
+            <line x1="68" y1="241" x2="88" y2="241" stroke="#888" stroke-width="0.7" marker-end="url(#arrB)"/>
+            <!-- Expert 1 inactive -->
+            <rect x="92" y="230" width="55" height="22" rx="3" fill="#aaa" fill-opacity="0.05" stroke="#ccc" stroke-width="0.6"/>
+            <text x="119" y="244" text-anchor="middle" font-size="8" fill="#ccc">ψ<tspan font-size="6" baseline-shift="sub">θ₁</tspan></text>
+            <text x="119" y="228" text-anchor="middle" font-size="9" fill="#daa">&#10007;</text>
+            <!-- Expert 2 inactive -->
+            <rect x="156" y="230" width="55" height="22" rx="3" fill="#aaa" fill-opacity="0.05" stroke="#ccc" stroke-width="0.6"/>
+            <text x="183" y="244" text-anchor="middle" font-size="8" fill="#ccc">ψ<tspan font-size="6" baseline-shift="sub">θ₂</tspan></text>
+            <text x="183" y="228" text-anchor="middle" font-size="9" fill="#daa">&#10007;</text>
+            <!-- Expert 3 active -->
+            <rect x="220" y="230" width="55" height="22" rx="3" fill="#3D8B37" fill-opacity="0.12" stroke="#3D8B37" stroke-width="1"/>
+            <text x="247" y="244" text-anchor="middle" font-size="8" fill="#333">ψ<tspan font-size="6" baseline-shift="sub">θ₃</tspan></text>
+            <text x="247" y="228" text-anchor="middle" font-size="10" fill="#3D8B37">&#10003;</text>
+            <!-- Output -->
+            <line x1="276" y1="241" x2="292" y2="241" stroke="#3D8B37" stroke-width="0.7" marker-end="url(#arrGreen)"/>
+            <text x="296" y="244" font-size="7" fill="#333">ŷ (tail expert dominates)</text>
+
+            <!-- Legend -->
+            <rect x="92" y="266" width="14" height="10" rx="2" fill="#4A90D9" fill-opacity="0.15" stroke="#4A90D9" stroke-width="0.8"/>
+            <text x="110" y="274" font-size="7" fill="#555">trainable</text>
+            <rect x="160" y="266" width="14" height="10" rx="2" fill="#aaa" fill-opacity="0.15" stroke="#aaa" stroke-width="0.8"/>
+            <text x="178" y="274" font-size="7" fill="#555">frozen</text>
+            <circle cx="230" cy="271" r="5" fill="white" stroke="#888" stroke-width="0.6"/>
+            <line x1="230" y1="271" x2="233" y2="268" stroke="#666" stroke-width="0.6" stroke-linecap="round"/>
+            <circle cx="230" cy="271" r="1" fill="#666"/>
+            <text x="238" y="274" font-size="7" fill="#555">routing gate</text>
+          </svg>
+        </div>
       </div>
 
       <div class="method-card contrastive">
         <h3><span class="method-tag contrastive">Contrastive</span> SupProto</h3>
         <p>Fixed antipodal class prototypes on the unit sphere. Minority and majority prototypes are placed at opposite poles, with a conditional pull loss that prevents collapse.</p>
         <div class="formula">p<sub>min</sub> = &minus;p<sub>maj</sub></div>
+        <div class="method-figure">
+          <svg viewBox="0 0 420 200" xmlns="http://www.w3.org/2000/svg">
+            <defs>
+              <marker id="arrProtoR" markerWidth="5" markerHeight="5" refX="4" refY="2.5" orient="auto"><path d="M0,0 L5,2.5 L0,5" fill="#B8472A"/></marker>
+              <marker id="arrProtoB" markerWidth="5" markerHeight="5" refX="4" refY="2.5" orient="auto"><path d="M0,0 L5,2.5 L0,5" fill="#4A90D9"/></marker>
+            </defs>
+            <!-- Unit circle -->
+            <circle cx="190" cy="100" r="80" fill="none" stroke="#888" stroke-width="0.7"/>
+            <!-- Antipodal dashed line -->
+            <line x1="190" y1="18" x2="190" y2="182" stroke="#555" stroke-width="0.5" stroke-dasharray="4,3"/>
+            <!-- Majority prototype (top) -->
+            <rect x="185" y="14" width="10" height="10" rx="0" transform="rotate(45 190 19)" fill="#B8472A" fill-opacity="0.2" stroke="#B8472A" stroke-width="1"/>
+            <text x="190" y="9" text-anchor="middle" font-size="9" font-weight="700" fill="#B8472A">p<tspan font-size="6" dy="2">maj</tspan></text>
+            <!-- Minority prototype (bottom) -->
+            <rect x="185" y="176" width="10" height="10" rx="0" transform="rotate(45 190 181)" fill="#4A90D9" fill-opacity="0.2" stroke="#4A90D9" stroke-width="1"/>
+            <text x="190" y="198" text-anchor="middle" font-size="9" font-weight="700" fill="#4A90D9">p<tspan font-size="6" dy="2">min</tspan><tspan font-size="8" dy="-2"> = −p</tspan><tspan font-size="6" dy="2">maj</tspan></text>
+            <!-- Majority threshold arc (cos=0.5) -->
+            <path d="M 121,60 A 80,80 0 0,1 259,60" fill="none" stroke="#B8472A" stroke-width="0.7" stroke-dasharray="3,2"/>
+            <text x="278" y="57" font-size="7" fill="#B8472A" font-style="italic">cos = 0.5</text>
+            <!-- Minority threshold arc (cos=0.5) -->
+            <path d="M 121,140 A 80,80 0 0,0 259,140" fill="none" stroke="#4A90D9" stroke-width="0.7" stroke-dasharray="3,2"/>
+            <text x="278" y="145" font-size="7" fill="#4A90D9" font-style="italic">cos = 0.5</text>
+            <!-- Majority samples (near top) -->
+            <circle cx="170" cy="28" r="3.5" fill="#B8472A"/><circle cx="207" cy="26" r="3.5" fill="#B8472A"/>
+            <circle cx="178" cy="33" r="3.5" fill="#B8472A"/><circle cx="215" cy="34" r="3.5" fill="#B8472A"/>
+            <circle cx="195" cy="24" r="3.5" fill="#B8472A"/>
+            <!-- One majority below threshold, attracted -->
+            <circle cx="245" cy="93" r="3.5" fill="#B8472A" opacity="0.5"/>
+            <line x1="243" y1="91" x2="220" y2="48" stroke="#B8472A" stroke-width="0.7" marker-end="url(#arrProtoR)"/>
+            <text x="252" y="95" font-size="7" fill="#B8472A" font-style="italic">attracted</text>
+            <!-- Minority samples (near bottom) -->
+            <circle cx="205" cy="172" r="3.5" fill="#4A90D9"/><circle cx="168" cy="174" r="3.5" fill="#4A90D9"/>
+            <circle cx="198" cy="177" r="3.5" fill="#4A90D9"/>
+            <!-- One minority above threshold, attracted -->
+            <circle cx="128" cy="110" r="3.5" fill="#4A90D9" opacity="0.5"/>
+            <line x1="130" y1="112" x2="155" y2="160" stroke="#4A90D9" stroke-width="0.7" marker-end="url(#arrProtoB)"/>
+            <text x="97" y="112" font-size="7" fill="#4A90D9" font-style="italic">attracted</text>
+            <!-- Legend -->
+            <rect x="20" y="50" width="7" height="7" transform="rotate(45 23.5 53.5)" fill="#888" fill-opacity="0.2" stroke="#888" stroke-width="0.6"/>
+            <text x="35" y="56" font-size="7" fill="#555">prototype</text>
+            <circle cx="23" cy="70" r="3" fill="#B8472A"/>
+            <text x="35" y="73" font-size="7" fill="#555">majority</text>
+            <circle cx="23" cy="84" r="3" fill="#4A90D9"/>
+            <text x="35" y="87" font-size="7" fill="#555">minority</text>
+            <circle cx="23" cy="98" r="3" fill="#B8472A" opacity="0.5"/>
+            <text x="35" y="101" font-size="7" fill="#555">below threshold</text>
+          </svg>
+        </div>
       </div>
 
       <div class="method-card contrastive">
         <h3><span class="method-tag contrastive">Contrastive</span> SupMin</h3>
         <p>Class-routed contrastive loss: applies SupCon only within the minority class and NT-Xent for the majority, preventing the minority from being drowned out.</p>
+        <div class="method-figure">
+          <svg viewBox="0 0 420 200" xmlns="http://www.w3.org/2000/svg">
+            <defs>
+              <marker id="arrSB" markerWidth="5" markerHeight="5" refX="4" refY="2.5" orient="auto"><path d="M0,0 L5,2.5 L0,5" fill="#4A90D9"/></marker>
+            </defs>
+            <!-- LEFT PANEL: Minority anchors SupCon -->
+            <rect x="5" y="5" width="195" height="178" rx="6" fill="#4A90D9" opacity="0.04"/>
+            <text x="102" y="20" text-anchor="middle" font-size="10" font-weight="700" fill="#4A90D9">Minority anchors: SupCon</text>
+            <!-- Positive edges (blue solid) -->
+            <line x1="95" y1="95" x2="65" y2="45" stroke="#4A90D9" stroke-width="1.5"/>
+            <line x1="95" y1="95" x2="45" y2="80" stroke="#4A90D9" stroke-width="1.5"/>
+            <!-- Negative edges (rust dotted) -->
+            <line x1="95" y1="95" x2="150" y2="40" stroke="#B8472A" stroke-width="0.6" stroke-dasharray="3,2"/>
+            <line x1="95" y1="95" x2="160" y2="95" stroke="#B8472A" stroke-width="0.6" stroke-dasharray="3,2"/>
+            <line x1="95" y1="95" x2="140" y2="150" stroke="#B8472A" stroke-width="0.6" stroke-dasharray="3,2"/>
+            <line x1="95" y1="95" x2="75" y2="155" stroke="#B8472A" stroke-width="0.6" stroke-dasharray="3,2"/>
+            <!-- Positive samples (minority, blue) -->
+            <circle cx="65" cy="45" r="5" fill="#4A90D9"/>
+            <text x="65" y="37" text-anchor="middle" font-size="8" fill="#4A90D9">z<tspan font-size="6" dy="2">p</tspan></text>
+            <circle cx="45" cy="80" r="5" fill="#4A90D9"/>
+            <text x="35" y="80" text-anchor="end" font-size="8" fill="#4A90D9">z<tspan font-size="6" dy="2">q</tspan></text>
+            <!-- Negative samples (majority, rust) -->
+            <circle cx="150" cy="40" r="4" fill="#B8472A"/><circle cx="160" cy="95" r="4" fill="#B8472A"/>
+            <circle cx="140" cy="150" r="4" fill="#B8472A"/><circle cx="75" cy="155" r="4" fill="#B8472A"/>
+            <!-- Anchor (minority, large) -->
+            <circle cx="95" cy="95" r="7" fill="#4A90D9"/>
+            <text x="95" y="112" text-anchor="middle" font-size="8" fill="#4A90D9">z<tspan font-size="6" dy="2">i</tspan></text>
+            <!-- Annotation -->
+            <text x="102" y="175" text-anchor="middle" font-size="8" fill="#4A90D9" font-style="italic">labels used: few positives</text>
+            <text x="102" y="186" text-anchor="middle" font-size="8" fill="#4A90D9" font-style="italic">⇒ strong gradients</text>
+
+            <!-- SEPARATOR -->
+            <line x1="210" y1="5" x2="210" y2="190" stroke="#888" stroke-width="0.5"/>
+
+            <!-- RIGHT PANEL: Majority anchors NT-Xent -->
+            <rect x="218" y="5" width="195" height="178" rx="6" fill="#B8472A" opacity="0.04"/>
+            <text x="315" y="20" text-anchor="middle" font-size="10" font-weight="700" fill="#B8472A">Majority anchors: NT-Xent</text>
+            <!-- Single positive edge (augmented view, blue solid) -->
+            <line x1="310" y1="95" x2="290" y2="48" stroke="#4A90D9" stroke-width="1.5"/>
+            <!-- Negative edges (rust dotted) -->
+            <line x1="310" y1="95" x2="370" y2="40" stroke="#B8472A" stroke-width="0.6" stroke-dasharray="3,2"/>
+            <line x1="310" y1="95" x2="380" y2="90" stroke="#B8472A" stroke-width="0.6" stroke-dasharray="3,2"/>
+            <line x1="310" y1="95" x2="360" y2="150" stroke="#B8472A" stroke-width="0.6" stroke-dasharray="3,2"/>
+            <line x1="310" y1="95" x2="270" y2="150" stroke="#B8472A" stroke-width="0.6" stroke-dasharray="3,2"/>
+            <line x1="310" y1="95" x2="250" y2="80" stroke="#B8472A" stroke-width="0.6" stroke-dasharray="3,2"/>
+            <line x1="310" y1="95" x2="355" y2="30" stroke="#B8472A" stroke-width="0.6" stroke-dasharray="3,2"/>
+            <!-- Augmented view -->
+            <circle cx="290" cy="48" r="5" fill="#4A90D9"/>
+            <text x="278" y="48" text-anchor="end" font-size="8" fill="#4A90D9">z<tspan font-size="6" dy="2">i</tspan>'</text>
+            <!-- Other samples (negatives, faded rust) -->
+            <circle cx="370" cy="40" r="4" fill="#B8472A" opacity="0.5"/><circle cx="380" cy="90" r="4" fill="#B8472A" opacity="0.5"/>
+            <circle cx="360" cy="150" r="4" fill="#B8472A" opacity="0.5"/><circle cx="270" cy="150" r="4" fill="#B8472A" opacity="0.5"/>
+            <circle cx="250" cy="80" r="4" fill="#B8472A" opacity="0.5"/><circle cx="355" cy="30" r="4" fill="#B8472A" opacity="0.5"/>
+            <!-- Anchor (majority, large) -->
+            <circle cx="310" cy="95" r="7" fill="#B8472A"/>
+            <text x="310" y="112" text-anchor="middle" font-size="8" fill="#B8472A">z<tspan font-size="6" dy="2">i</tspan></text>
+            <!-- Annotation -->
+            <text x="315" y="175" text-anchor="middle" font-size="8" fill="#B8472A" font-style="italic">no labels: only augment is positive</text>
+            <text x="315" y="186" text-anchor="middle" font-size="8" fill="#B8472A" font-style="italic">⇒ no saturation</text>
+          </svg>
+        </div>
       </div>
 
       <div class="method-card fusion">
         <h3><span class="method-tag fusion">Fusion</span> FuseMoE</h3>
         <p>Mixture-of-Experts Transformer for multimodal fusion. Laplace-gated TopK routing across modalities (vitals, labs, clinical notes), adapted for the 1% prevalence setting.</p>
+        <div class="method-figure">
+          <svg viewBox="0 0 480 140" xmlns="http://www.w3.org/2000/svg">
+            <defs>
+              <marker id="arrF" markerWidth="6" markerHeight="6" refX="5" refY="3" orient="auto"><path d="M0,0 L6,3 L0,6" fill="#888"/></marker>
+            </defs>
+
+            <!-- Modality encoders (left, stacked) -->
+            <rect x="5" y="8" width="72" height="30" rx="4" fill="#008080" fill-opacity="0.1" stroke="#008080" stroke-width="0.8"/>
+            <text x="41" y="22" text-anchor="middle" font-size="7.5" fill="#333">Irregular TS</text>
+            <text x="41" y="32" text-anchor="middle" font-size="7" fill="#008080">mTAND</text>
+
+            <rect x="5" y="48" width="72" height="30" rx="4" fill="#800080" fill-opacity="0.08" stroke="#800080" stroke-width="0.8"/>
+            <text x="41" y="62" text-anchor="middle" font-size="7.5" fill="#333">Clinical Notes</text>
+            <text x="41" y="72" text-anchor="middle" font-size="7" fill="#800080">BioBERT</text>
+
+            <rect x="5" y="88" width="72" height="30" rx="4" fill="#0088cc" fill-opacity="0.08" stroke="#0088cc" stroke-width="0.8"/>
+            <text x="41" y="102" text-anchor="middle" font-size="7.5" fill="#333">Regular TS</text>
+            <text x="41" y="112" text-anchor="middle" font-size="7" fill="#0088cc">Conv1D</text>
+
+            <!-- Token Type Embeddings -->
+            <rect x="105" y="8" width="40" height="110" rx="4" fill="#FFD700" fill-opacity="0.06" stroke="#DAA520" stroke-width="0.8"/>
+            <text x="125" y="55" text-anchor="middle" font-size="7" fill="#333">Token</text>
+            <text x="125" y="65" text-anchor="middle" font-size="7" fill="#333">Type</text>
+            <text x="125" y="75" text-anchor="middle" font-size="7" fill="#333">Embed.</text>
+
+            <!-- Arrows: encoders → TTE -->
+            <line x1="78" y1="23" x2="104" y2="23" stroke="#888" stroke-width="0.7" marker-end="url(#arrF)"/>
+            <line x1="78" y1="63" x2="104" y2="63" stroke="#888" stroke-width="0.7" marker-end="url(#arrF)"/>
+            <line x1="78" y1="103" x2="104" y2="103" stroke="#888" stroke-width="0.7" marker-end="url(#arrF)"/>
+
+            <!-- Transformer Cross-Encoder -->
+            <rect x="170" y="3" width="180" height="120" rx="6" fill="#E07050" fill-opacity="0.08" stroke="#E07050" stroke-width="1"/>
+            <text x="260" y="30" text-anchor="middle" font-size="9" font-weight="700" fill="#333">Transformer</text>
+            <text x="260" y="44" text-anchor="middle" font-size="9" font-weight="700" fill="#333">Cross-Encoder x N</text>
+            <line x1="190" y1="52" x2="330" y2="52" stroke="#E07050" stroke-width="0.4" stroke-dasharray="3,2"/>
+            <text x="260" y="68" text-anchor="middle" font-size="7.5" fill="#555">Self-attn</text>
+            <text x="260" y="82" text-anchor="middle" font-size="8" font-weight="600" fill="#E07050">MoE Fusion</text>
+            <text x="260" y="95" text-anchor="middle" font-size="7.5" fill="#555">FFN</text>
+            <text x="260" y="112" text-anchor="middle" font-size="6.5" fill="#888">(Laplace gating, TopK)</text>
+
+            <!-- Arrow: TTE → Transformer -->
+            <line x1="146" y1="63" x2="169" y2="63" stroke="#888" stroke-width="0.7" marker-end="url(#arrF)"/>
+
+            <!-- Laplace gating equation (top) -->
+            <text x="260" y="136" text-anchor="middle" font-size="7" fill="#888" font-style="italic">h(x) = TopK(−||W − x||₂)</text>
+
+            <!-- Classification Head -->
+            <rect x="380" y="28" width="90" height="70" rx="4" fill="#cc3333" fill-opacity="0.08" stroke="#cc3333" stroke-width="0.8"/>
+            <text x="425" y="58" text-anchor="middle" font-size="8" fill="#333">Classification</text>
+            <text x="425" y="72" text-anchor="middle" font-size="8" fill="#333">Head</text>
+            <text x="425" y="88" text-anchor="middle" font-size="7.5" font-weight="600" fill="#cc3333">PU risk</text>
+
+            <!-- Arrow: Transformer → Classification -->
+            <line x1="351" y1="63" x2="379" y2="63" stroke="#888" stroke-width="0.7" marker-end="url(#arrF)"/>
+          </svg>
+        </div>
       </div>
 
     </div>
@@ -639,183 +1190,183 @@
 </footer>
 
 <!-- ════════════════════════════════════════════════ -->
-<!-- Collapse Animation Script                        -->
+<!-- Step-by-step Collapse Animation Script          -->
 <!-- ════════════════════════════════════════════════ -->
 <script>
 (() => {
-  const canvas = document.getElementById('collapseCanvas');
-  const ctx = canvas.getContext('2d');
+  const overlay  = document.getElementById('animOverlay');
+  const svg      = document.getElementById('animSvg');
+  const titleEl  = document.getElementById('animTitle');
+  const descEl   = document.getElementById('animDesc');
+  const indEl    = document.getElementById('animIndicator');
+  const prevBtn  = document.getElementById('animPrev');
+  const nextBtn  = document.getElementById('animNext');
 
-  let W, H, dpr;
-  const MINORITY_COLOR = '#4A90D9';   // blue
-  const MAJORITY_COLOR = '#D9634A';   // rust
-  const TRAIL_ALPHA = 0.03;
-
-  // Particle system
-  const NUM_MAJORITY = 60;
-  const NUM_MINORITY = 8;
-  let particles = [];
-  let phase = 0;         // 0 = separated, 1 = collapsing, 2 = collapsed
-  let phaseTime = 0;
-  const PHASE_DURATIONS = [3000, 3000, 2500]; // ms per phase
-  let collapseTarget = { x: 0, y: 0 };
-
-  function resize() {
-    dpr = window.devicePixelRatio || 1;
-    W = canvas.clientWidth;
-    H = canvas.clientHeight;
-    canvas.width = W * dpr;
-    canvas.height = H * dpr;
-    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
-    collapseTarget = { x: W * 0.5, y: H * 0.5 };
-  }
-
-  class Particle {
-    constructor(isMinority) {
-      this.isMinority = isMinority;
-      this.color = isMinority ? MINORITY_COLOR : MAJORITY_COLOR;
-      this.r = isMinority ? 4 : 3;
-      this.reset();
-    }
-
-    reset() {
-      // Separated positions: minority top-left quadrant, majority bottom-right
-      if (this.isMinority) {
-        this.homeX = W * 0.3 + (Math.random() - 0.5) * W * 0.12;
-        this.homeY = H * 0.35 + (Math.random() - 0.5) * H * 0.12;
-      } else {
-        this.homeX = W * 0.7 + (Math.random() - 0.5) * W * 0.15;
-        this.homeY = H * 0.65 + (Math.random() - 0.5) * H * 0.15;
-      }
-      this.x = this.homeX;
-      this.y = this.homeY;
-      this.vx = 0;
-      this.vy = 0;
-      // Gentle wobble
-      this.wobbleAmp = 0.3 + Math.random() * 0.5;
-      this.wobbleFreq = 0.001 + Math.random() * 0.002;
-      this.wobblePhase = Math.random() * Math.PI * 2;
-    }
-
-    update(dt, t) {
-      let targetX, targetY;
-
-      if (phase === 0) {
-        // Float near home
-        targetX = this.homeX + Math.sin(t * this.wobbleFreq + this.wobblePhase) * this.wobbleAmp * 20;
-        targetY = this.homeY + Math.cos(t * this.wobbleFreq * 1.3 + this.wobblePhase) * this.wobbleAmp * 20;
-        const ease = 0.02;
-        this.vx += (targetX - this.x) * ease;
-        this.vy += (targetY - this.y) * ease;
-      } else if (phase === 1) {
-        // Collapse toward center — majority pulls minority in
-        const progress = Math.min(phaseTime / PHASE_DURATIONS[1], 1);
-        const eased = progress * progress * (3 - 2 * progress); // smoothstep
-        targetX = this.homeX + (collapseTarget.x - this.homeX) * eased;
-        targetY = this.homeY + (collapseTarget.y - this.homeY) * eased;
-        const ease = 0.06;
-        this.vx += (targetX - this.x) * ease;
-        this.vy += (targetY - this.y) * ease;
-      } else {
-        // Collapsed — tight jitter
-        const jitter = this.isMinority ? 2 : 4;
-        targetX = collapseTarget.x + Math.sin(t * 0.005 + this.wobblePhase) * jitter;
-        targetY = collapseTarget.y + Math.cos(t * 0.004 + this.wobblePhase) * jitter;
-        const ease = 0.08;
-        this.vx += (targetX - this.x) * ease;
-        this.vy += (targetY - this.y) * ease;
-      }
-
-      this.vx *= 0.9;
-      this.vy *= 0.9;
-      this.x += this.vx;
-      this.y += this.vy;
-    }
-
-    draw() {
-      ctx.beginPath();
-      ctx.arc(this.x, this.y, this.r, 0, Math.PI * 2);
-      ctx.fillStyle = this.color;
-      ctx.fill();
-
-      // Glow
-      ctx.beginPath();
-      ctx.arc(this.x, this.y, this.r * 3, 0, Math.PI * 2);
-      const grad = ctx.createRadialGradient(this.x, this.y, this.r, this.x, this.y, this.r * 3);
-      grad.addColorStop(0, this.color + '40');
-      grad.addColorStop(1, this.color + '00');
-      ctx.fillStyle = grad;
-      ctx.fill();
-    }
-  }
-
-  function initParticles() {
-    particles = [];
-    for (let i = 0; i < NUM_MAJORITY; i++) particles.push(new Particle(false));
-    for (let i = 0; i < NUM_MINORITY; i++) particles.push(new Particle(true));
-  }
-
-  // Phase labels
-  function drawLabels() {
-    ctx.font = '600 13px system-ui, sans-serif';
-    ctx.textAlign = 'center';
-
-    if (phase === 0) {
-      ctx.fillStyle = MINORITY_COLOR + 'AA';
-      ctx.fillText('minority class', W * 0.3, H * 0.25);
-      ctx.fillStyle = MAJORITY_COLOR + 'AA';
-      ctx.fillText('majority class', W * 0.7, H * 0.8);
-    } else if (phase === 2) {
-      ctx.fillStyle = 'rgba(255,100,80,0.7)';
-      ctx.font = '600 14px system-ui, sans-serif';
-      ctx.fillText('single-point collapse', collapseTarget.x, collapseTarget.y - 40);
-      ctx.font = '400 12px system-ui, sans-serif';
-      ctx.fillStyle = 'rgba(255,255,255,0.35)';
-      ctx.fillText('gradients \u2192 0', collapseTarget.x, collapseTarget.y + 45);
-    }
-  }
-
-  let lastTime = 0;
-  let globalTime = 0;
-
-  function loop(ts) {
-    const dt = Math.min(ts - lastTime, 50);
-    lastTime = ts;
-    globalTime += dt;
-    phaseTime += dt;
-
-    // Phase transitions
-    if (phaseTime > PHASE_DURATIONS[phase]) {
-      phaseTime = 0;
-      phase = (phase + 1) % 3;
-      if (phase === 0) {
-        // Reset to separated
-        particles.forEach(p => p.reset());
-      }
-    }
-
-    // Fade trail
-    ctx.fillStyle = `rgba(10, 22, 40, ${0.15})`;
-    ctx.fillRect(0, 0, W, H);
-
-    particles.forEach(p => {
-      p.update(dt, globalTime);
-      p.draw();
-    });
-
-    drawLabels();
-    requestAnimationFrame(loop);
-  }
-
-  window.addEventListener('resize', () => {
-    resize();
-    collapseTarget = { x: W * 0.5, y: H * 0.5 };
-    particles.forEach(p => p.reset());
+  document.getElementById('openAnimBtn').addEventListener('click', () => {
+    overlay.classList.add('active');
+    render();
   });
+  document.getElementById('animClose').addEventListener('click', () => {
+    overlay.classList.remove('active');
+  });
+  overlay.addEventListener('click', e => { if (e.target === overlay) overlay.classList.remove('active'); });
+  document.addEventListener('keydown', e => {
+    if (!overlay.classList.contains('active')) return;
+    if (e.key === 'Escape') overlay.classList.remove('active');
+    if (e.key === 'ArrowRight' && step < steps.length - 1) { step++; render(); }
+    if (e.key === 'ArrowLeft' && step > 0) { step--; render(); }
+  });
+  prevBtn.addEventListener('click', () => { if (step > 0) { step--; render(); } });
+  nextBtn.addEventListener('click', () => { if (step < steps.length - 1) { step++; render(); } });
 
-  resize();
-  initParticles();
-  requestAnimationFrame(loop);
+  const B = '#4A90D9', R = '#D9634A', M = '#888';
+  let step = 0;
+
+  // Seeded random-ish positions for consistency
+  const majPts = [
+    [355,95],[370,110],[385,85],[400,120],[360,140],[390,65],[415,100],[375,130],
+    [345,115],[405,80],[350,70],[395,135],[410,60],[380,150],[365,55],
+    [340,130],[425,90],[355,160],[400,50],[385,105],[415,140],[370,75],
+    [345,85],[390,155],[360,100]
+  ];
+  const minPts = [[175,140],[195,170],[160,185]];
+
+  // Collapsed positions: all near center
+  const cx = 280, cy = 140;
+  const collMaj = majPts.map((_,i) => [cx + (i%5-2)*5 + (i%3)*2, cy + (Math.floor(i/5)%5-2)*5 + (i%4)*2]);
+  const collMin = [[cx-2, cy+1],[cx+3, cy-2],[cx-1, cy+4]];
+
+  // Mid-collapse: lerp 60% toward center
+  const midMaj = majPts.map((p,i) => [p[0]*0.45 + collMaj[i][0]*0.55, p[1]*0.45 + collMaj[i][1]*0.55]);
+  const midMin = minPts.map((p,i) => [p[0]*0.45 + collMin[i][0]*0.55, p[1]*0.45 + collMin[i][1]*0.55]);
+
+  function dot(x, y, color, r = 5, opacity = 1) {
+    return `<circle cx="${x}" cy="${y}" r="${r}" fill="${color}" opacity="${opacity}"/>`;
+  }
+
+  function glow(x, y, color, r = 5) {
+    return `<circle cx="${x}" cy="${y}" r="${r*2.5}" fill="${color}" opacity="0.12"/>` + dot(x, y, color, r);
+  }
+
+  function circle(cx, cy, r) {
+    return `<circle cx="${cx}" cy="${cy}" r="${r}" fill="none" stroke="rgba(0,0,0,0.1)" stroke-width="0.8"/>`;
+  }
+
+  const steps = [
+    {
+      title: 'Step 1: Balanced Representation',
+      desc: 'With balanced classes, contrastive learning separates minority (blue) and majority (rust) into distinct, well-separated clusters on the unit hypersphere.',
+      draw() {
+        let s = circle(280, 140, 120);
+        s += `<text x="170" y="45" font-size="11" fill="${B}" opacity="0.8" font-weight="600">minority c+</text>`;
+        s += `<text x="365" y="245" font-size="11" fill="${R}" opacity="0.8" font-weight="600">majority c-</text>`;
+        for (const [x,y] of minPts) s += glow(x, y, B);
+        for (const [x,y] of majPts.slice(0,8)) s += glow(x, y, R);
+        s += `<line x1="210" y1="35" x2="350" y2="255" stroke="rgba(0,0,0,0.15)" stroke-width="1" stroke-dasharray="6,4"/>`;
+        s += `<text x="330" y="30" font-size="9" fill="#888">decision boundary</text>`;
+        s += `<text x="280" y="285" font-size="9" fill="#999" text-anchor="middle">classes well separated</text>`;
+        return s;
+      }
+    },
+    {
+      title: 'Step 2: Gradient Starvation',
+      desc: 'At 99:1 imbalance, the majority class dominates gradient updates. The effective gradient contribution of the minority class is starved to near zero.',
+      draw() {
+        let s = '';
+        const bx = 60, by = 60, bw = 200, bh = 180;
+        s += `<text x="${bx + bw/2}" y="${by - 15}" text-anchor="middle" font-size="10" fill="#333" font-weight="600">Per-class gradient signal</text>`;
+        s += `<text x="${bx + bw/2}" y="${by - 2}" text-anchor="middle" font-size="8" fill="#888">||E[&#8711;L]||</text>`;
+        const labels = ['c\u2081','c\u2082','c\u2083','c\u2084','c\u2085','c\u2086'];
+        const heights = [140,150,160,145,135,155];
+        const colors = [R,R,M,M,B,B];
+        for (let i = 0; i < 6; i++) {
+          const x = bx + 10 + i * 32;
+          s += `<rect x="${x}" y="${by + bh - heights[i]}" width="22" height="${heights[i]}" rx="2" fill="${colors[i]}" opacity="0.6"/>`;
+          s += `<text x="${x+11}" y="${by + bh + 14}" text-anchor="middle" font-size="8" fill="#777">${labels[i]}</text>`;
+        }
+        s += `<line x1="${bx}" y1="${by + bh}" x2="${bx + bw}" y2="${by + bh}" stroke="rgba(0,0,0,0.1)" stroke-width="0.5"/>`;
+        s += `<text x="280" y="${by + bh/2 + 5}" text-anchor="middle" font-size="16" fill="#999">&#215; P(y=c)</text>`;
+        s += `<text x="280" y="${by + bh/2 + 22}" text-anchor="middle" font-size="14" fill="#aaa">&#8594;</text>`;
+        const rx = 320;
+        s += `<text x="${rx + bw/2}" y="${by - 15}" text-anchor="middle" font-size="10" fill="#333" font-weight="600">Effective contribution</text>`;
+        const effHeights = [170, 60, 32, 20, 14, 10];
+        for (let i = 0; i < 6; i++) {
+          const x = rx + 10 + i * 32;
+          s += `<rect x="${x}" y="${by + bh - effHeights[i]}" width="22" height="${effHeights[i]}" rx="2" fill="${colors[i]}" opacity="0.6"/>`;
+          s += `<text x="${x+11}" y="${by + bh + 14}" text-anchor="middle" font-size="8" fill="#777">${labels[i]}</text>`;
+        }
+        s += `<line x1="${rx}" y1="${by + bh}" x2="${rx + bw}" y2="${by + bh}" stroke="rgba(0,0,0,0.1)" stroke-width="0.5"/>`;
+        s += `<line x1="${rx + 70}" y1="${by + bh - 25}" x2="${rx + bw}" y2="${by + bh - 25}" stroke="${B}" stroke-width="0.8" stroke-dasharray="4,3"/>`;
+        s += `<text x="${rx + bw + 5}" y="${by + bh - 22}" font-size="8" fill="${B}" opacity="0.7">starved &#8776; 0</text>`;
+        s += `<text x="${rx + 25}" y="${by + 5}" font-size="8" fill="${R}" font-style="italic" opacity="0.8">dominates</text>`;
+        return s;
+      }
+    },
+    {
+      title: 'Step 3: Majority Pulls Minority In',
+      desc: 'As training continues, the majority gradient dominates. Minority embeddings are pulled toward the majority cluster. The decision boundary becomes meaningless.',
+      draw() {
+        let s = circle(280, 140, 120);
+        for (const [x,y] of majPts.slice(0,12)) s += glow(x, y, R, 4);
+        for (let i = 0; i < minPts.length; i++) {
+          const [ox, oy] = minPts[i];
+          const [mx, my] = midMaj[i];
+          s += dot(ox, oy, B, 4, 0.2);
+          s += `<line x1="${ox}" y1="${oy}" x2="${mx}" y2="${my}" stroke="${B}" stroke-width="0.8" stroke-dasharray="4,3" marker-end="url(#arrAnimB)"/>`;
+          s += glow(mx, my, B, 5);
+        }
+        s += `<line x1="210" y1="35" x2="350" y2="255" stroke="rgba(0,0,0,0.05)" stroke-width="1" stroke-dasharray="6,4"/>`;
+        s += `<defs><marker id="arrAnimB" markerWidth="6" markerHeight="6" refX="5" refY="3" orient="auto"><path d="M0,0 L6,3 L0,6" fill="${B}" opacity="0.6"/></marker></defs>`;
+        s += `<text x="280" y="285" font-size="9" fill="#999" text-anchor="middle">minority embeddings drifting toward majority</text>`;
+        return s;
+      }
+    },
+    {
+      title: 'Step 4: Single-Point Collapse',
+      desc: 'All embeddings converge to a single point. The model predicts every sample as the majority class. Sensitivity = 0%, accuracy > 99%. Gradients vanish.',
+      draw() {
+        let s = circle(280, 140, 120);
+        for (const [x,y] of collMaj) s += dot(x, y, R, 3.5, 0.7);
+        for (const [x,y] of collMin) s += dot(x, y, B, 4, 0.8);
+        s += `<circle cx="${cx}" cy="${cy}" r="35" fill="${R}" opacity="0.06"/>`;
+        s += `<circle cx="${cx}" cy="${cy}" r="20" fill="${R}" opacity="0.1"/>`;
+        s += `<text x="${cx}" y="${cy - 50}" text-anchor="middle" font-size="12" fill="#B8472A" font-weight="700">single-point collapse</text>`;
+        s += `<text x="${cx}" y="${cy + 60}" text-anchor="middle" font-size="10" fill="#999">gradients &#8594; 0</text>`;
+        s += `<text x="${cx + 90}" y="${cy - 25}" font-size="9" fill="#B8472A" opacity="0.7">&#8592; all samples here</text>`;
+        return s;
+      }
+    },
+    {
+      title: 'Step 5: The Fix — Long-Tail Methods',
+      desc: 'Methods like LDAM (larger margin for minority), SupProto (antipodal prototypes), and SupMin (class-routed contrastive loss) prevent collapse and restore class separation.',
+      draw() {
+        let s = circle(280, 140, 120);
+        const fixMin = [[185,100],[200,120],[170,135]];
+        for (const [x,y] of fixMin) s += glow(x, y, B, 6);
+        s += `<text x="155" y="80" font-size="10" fill="${B}" opacity="0.8" font-weight="600">minority</text>`;
+        const fixMaj = [[370,160],[385,145],[400,175],[355,180],[390,130],[375,195],[410,155],[365,135]];
+        for (const [x,y] of fixMaj) s += glow(x, y, R, 4);
+        s += `<text x="410" y="210" font-size="10" fill="${R}" opacity="0.8" font-weight="600">majority</text>`;
+        s += `<line x1="225" y1="45" x2="340" y2="245" stroke="rgba(0,0,0,0.15)" stroke-width="1.5" stroke-dasharray="6,4"/>`;
+        s += `<rect x="218" y="90" width="14" height="70" rx="2" fill="${B}" opacity="0.08"/>`;
+        s += `<rect x="232" y="90" width="7" height="70" rx="2" fill="${R}" opacity="0.06"/>`;
+        s += `<text x="210" y="85" font-size="7" fill="${B}" opacity="0.7">large &#916;</text>`;
+        s += `<text x="233" y="85" font-size="7" fill="${R}" opacity="0.6">small &#916;</text>`;
+        s += `<text x="280" y="285" font-size="9" fill="#999" text-anchor="middle">class separation restored with class-dependent margins</text>`;
+        return s;
+      }
+    }
+  ];
+
+  function render() {
+    const s = steps[step];
+    titleEl.textContent = s.title;
+    descEl.textContent = s.desc;
+    svg.innerHTML = s.draw();
+    indEl.textContent = `${step + 1} / ${steps.length}`;
+    prevBtn.disabled = step === 0;
+    nextBtn.disabled = step === steps.length - 1;
+  }
 })();
 </script>
 
